@@ -5,12 +5,18 @@ function ErrorPage() {
   console.error(error);
   return (
     <>
-      <div>
-        <h1>Oops!</h1>
-        <p>Sorry, an unexpected error has occurred.</p>
-        <p>
-          <i>{error.statusText || error.message}</i>
-        </p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-200">
+        <div className="text-center">
+          <h1 className="text-3xl md:mb-4 md:text-4xl lg:text-5xl font-bold text-red-600">
+            Oops!
+          </h1>
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-800 mb-4">
+            Sorry, an unexpected error has occurred.
+          </p>
+          <p className="italic text-base md:text-lg lg:text-xl text-blue-600">
+            {error?.statusText || error?.message}
+          </p>
+        </div>
       </div>
     </>
   );
