@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { useSpaceFlights } from "../../context/SpaceFlightContext";
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/20/solid";
 
 function Pagination({ onCurrentFlightsChange }) {
   const { allSpaceFlights } = useSpaceFlights();
-  console.log(allSpaceFlights);
+  // console.log(allSpaceFlights);
 
   const [flightsPerPage] = useState(9);
-  // const [currentPage, setCurrentPage] = useState(1);
-  const [currentPage, setCurrentPage] = useState(() => {
-    const storedPage = localStorage.getItem("currentPage");
-    return storedPage ? parseInt(storedPage) : 1;
-  });
+  const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(allSpaceFlights.length / flightsPerPage);
 
   // Calculate the index of the first and last launch for the current page
   const indexOfLastLaunch = currentPage * flightsPerPage;
   const indexOfFirstLaunch = indexOfLastLaunch - flightsPerPage;
 
-  // Function to change the current page
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const contentChange = () => {
     const newallSpaceFlights = allSpaceFlights.slice(
       indexOfFirstLaunch,
       indexOfLastLaunch
@@ -27,16 +22,23 @@ function Pagination({ onCurrentFlightsChange }) {
     // Call the callback function to send the newallSpaceFlights to the parent
     onCurrentFlightsChange(newallSpaceFlights);
   };
+  // Function to change the current page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    contentChange();
+  };
 
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+      contentChange();
     }
   };
 
   const prevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      contentChange();
     }
   };
 
@@ -44,13 +46,14 @@ function Pagination({ onCurrentFlightsChange }) {
     <>
       <section>
         {/* pagination */}
-        <div className="my-16 text-center">
-          <button
-            onClick={prevPage}
-            className="border border-blue-700 text-blue-700 p-2"
-          >
-            Prev
-          </button>
+        <div className="my-16 pt-0 text-sm text-[#0D6EFD] text-center flex items-end justify-center">
+          <div className="w-8 h-9 flex items-center justify-center  border border-[#DEE2E6]">
+            <div>
+              <button onClick={prevPage} className="">
+                <ChevronLeftIcon className="w-8 h-8 p-2" />
+              </button>
+            </div>
+          </div>{" "}
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
@@ -64,13 +67,13 @@ function Pagination({ onCurrentFlightsChange }) {
               {index + 1}
             </button>
           ))}
-
-          <button
-            onClick={nextPage}
-            className="border border-blue-700 text-blue-700 p-2"
-          >
-            Next
-          </button>
+          <div className="w-8 h-9  flex items-center justify-center border border-[#DEE2E6]">
+            <div>
+              <button onClick={nextPage} className="">
+                <ChevronRightIcon className="w-10 h-10 p-2" />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </>
